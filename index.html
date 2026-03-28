@@ -5,43 +5,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FlavorFlow – Ultimate Recipe Planner</title>
 <style>
+  /* Body & general */
   body { margin:0; font-family:"Trebuchet MS", sans-serif; background:#FFF1E6; color:#333; }
   h1,h2,h3,h4 { margin:0 0 0.5em 0; }
   p { margin:0.2em 0; }
   ul, ol { margin:0.2em 0 0.5em 1.5em; }
-  header { padding:1em 2em; background: linear-gradient(90deg,#FFD8B8,#FFCAD4); text-align:center; font-size:2em; color:#FFF; }
+
+  /* Header */
+  header { padding:1.5em 2em; background: linear-gradient(90deg,#FFD8B8,#FFCAD4); text-align:center; font-size:2em; color:#FFF; }
+
+  /* Sidebar */
   #sidebar { position: fixed; top:0; left:0; width:220px; height:100%; background:#FFD8B8; padding:2em 1em; overflow-y:auto; }
   #sidebar h2 { margin-top:0; }
-  #sidebar button { display:block; width:100%; margin:0.3em 0; padding:0.5em; border:none; border-radius:15px; background:#FFCAD4; color:#333; cursor:pointer; transition:0.3s; }
+  #sidebar button { display:block; width:100%; margin:0.3em 0; padding:0.6em; border:none; border-radius:15px; background:#FFCAD4; color:#333; cursor:pointer; transition:0.3s; }
   #sidebar button:hover { background:#C8FACC; }
+
+  /* Filters bar */
   #filters { margin-left:240px; padding:1em; display:flex; flex-wrap:wrap; gap:0.5em; }
   #filters button { border:none; border-radius:20px; padding:0.5em 1em; cursor:pointer; background:#E7D6FF; transition:0.3s; }
   #filters button:hover { background:#C8FACC; }
-  #main { margin-left:240px; padding:1em 2em; display:grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap:1em; }
+
+  /* Main container for recipe cards */
+  #main { margin-left:240px; padding:2em; display:grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap:1.5em; }
+
+  /* Recipe card */
   .recipe-card { perspective:1000px; }
   .card-inner { position:relative; width:100%; transition: transform 0.8s; transform-style: preserve-3d; }
   .recipe-card:hover .card-inner { transform: rotateY(180deg); }
-  .card-front, .card-back { position:absolute; width:100%; padding:1em; backface-visibility:hidden; border-radius:15px; box-shadow:0 4px 8px rgba(0,0,0,0.2); }
+  .card-front, .card-back { position:absolute; width:100%; padding:1.2em; backface-visibility:hidden; border-radius:15px; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
   .card-front { background:#C7E8F3; }
   .card-back { background: linear-gradient(#E7D6FF,#FFF1E6); transform: rotateY(180deg); }
-  .badge { display:inline-block; padding:0.2em 0.5em; border-radius:12px; margin-right:0.3em; font-size:0.8em; color:#fff; }
+
+  /* Badges */
+  .badge { display:inline-block; padding:0.3em 0.6em; border-radius:12px; margin-right:0.3em; margin-bottom:0.5em; font-size:0.8em; color:#fff; }
   .vegetarian { background:#FFB3AB; }
   .vegan { background:#C8FACC; }
-  .jain { background:#FFD8B8; }
+  .jain { background:#FFD8B8; color:#333; }
   .healthy { background:#FFF9C4; color:#333; }
   .breakfast { background:#E7D6FF; }
   .lunch { background:#C7E8F3; }
   .dinner { background:#FFE0B2; color:#333; }
   .snacks { background:#FFCAD4; }
   .dessert { background:#FFB3AB; }
-  #bottombar { position: fixed; bottom:0; left:0; width:100%; background:#FFE0B2; padding:0.5em; display:flex; justify-content:center; gap:1em; }
+
+  /* Bottom bar */
+  #bottombar { position: fixed; bottom:0; left:0; width:100%; background:#FFE0B2; padding:0.7em; display:flex; justify-content:center; gap:1em; }
+
+  /* Dark mode */
   body.dark { background:#2C2C2C; color:#eee; }
   body.dark .card-front { background:#555; color:#eee; }
   body.dark .card-back { background:#444; color:#eee; }
   body.dark #sidebar { background:#333; color:#eee; }
   body.dark #filters button { background:#666; color:#eee; }
   body.dark #bottombar { background:#555; color:#eee; }
-  input.servings { width:40px; text-align:center; }
+
+  /* Servings input */
+  input.servings { width:45px; text-align:center; }
+
 </style>
 </head>
 <body>
@@ -69,6 +89,13 @@
 </div>
 
 <div id="main">
+
+
+
+  
+
+
+  
 
 <!-- --------------- CHUNK 1: Indian Recipes 1–25 (FULL) --------------- -->
 
@@ -3634,7 +3661,6 @@ function updateServings(input, recipeId){
   let card = document.getElementById(recipeId);
   let factor = input.value / parseInt(input.defaultValue);
   card.querySelectorAll('ul li').forEach(li=>{
-    // Very simple multiplier for numeric amounts in string (demo purposes)
     li.textContent = li.textContent.replace(/(\d+(\.\d+)?)(\s?(g|ml|cup|tbsp|tsp|oz))?/g, (match,p1,p2,p3)=>{
       let num = parseFloat(p1) * factor;
       return num.toFixed(1)+(p3||'');
