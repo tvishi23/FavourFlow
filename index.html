@@ -1,0 +1,3646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlavorFlow – Ultimate Recipe Planner</title>
+<style>
+  body { margin:0; font-family:"Trebuchet MS", sans-serif; background:#FFF1E6; color:#333; }
+  h1,h2,h3,h4 { margin:0 0 0.5em 0; }
+  p { margin:0.2em 0; }
+  ul, ol { margin:0.2em 0 0.5em 1.5em; }
+  header { padding:1em 2em; background: linear-gradient(90deg,#FFD8B8,#FFCAD4); text-align:center; font-size:2em; color:#FFF; }
+  #sidebar { position: fixed; top:0; left:0; width:220px; height:100%; background:#FFD8B8; padding:2em 1em; overflow-y:auto; }
+  #sidebar h2 { margin-top:0; }
+  #sidebar button { display:block; width:100%; margin:0.3em 0; padding:0.5em; border:none; border-radius:15px; background:#FFCAD4; color:#333; cursor:pointer; transition:0.3s; }
+  #sidebar button:hover { background:#C8FACC; }
+  #filters { margin-left:240px; padding:1em; display:flex; flex-wrap:wrap; gap:0.5em; }
+  #filters button { border:none; border-radius:20px; padding:0.5em 1em; cursor:pointer; background:#E7D6FF; transition:0.3s; }
+  #filters button:hover { background:#C8FACC; }
+  #main { margin-left:240px; padding:1em 2em; display:grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap:1em; }
+  .recipe-card { perspective:1000px; }
+  .card-inner { position:relative; width:100%; transition: transform 0.8s; transform-style: preserve-3d; }
+  .recipe-card:hover .card-inner { transform: rotateY(180deg); }
+  .card-front, .card-back { position:absolute; width:100%; padding:1em; backface-visibility:hidden; border-radius:15px; box-shadow:0 4px 8px rgba(0,0,0,0.2); }
+  .card-front { background:#C7E8F3; }
+  .card-back { background: linear-gradient(#E7D6FF,#FFF1E6); transform: rotateY(180deg); }
+  .badge { display:inline-block; padding:0.2em 0.5em; border-radius:12px; margin-right:0.3em; font-size:0.8em; color:#fff; }
+  .vegetarian { background:#FFB3AB; }
+  .vegan { background:#C8FACC; }
+  .jain { background:#FFD8B8; }
+  .healthy { background:#FFF9C4; color:#333; }
+  .breakfast { background:#E7D6FF; }
+  .lunch { background:#C7E8F3; }
+  .dinner { background:#FFE0B2; color:#333; }
+  .snacks { background:#FFCAD4; }
+  .dessert { background:#FFB3AB; }
+  #bottombar { position: fixed; bottom:0; left:0; width:100%; background:#FFE0B2; padding:0.5em; display:flex; justify-content:center; gap:1em; }
+  body.dark { background:#2C2C2C; color:#eee; }
+  body.dark .card-front { background:#555; color:#eee; }
+  body.dark .card-back { background:#444; color:#eee; }
+  body.dark #sidebar { background:#333; color:#eee; }
+  body.dark #filters button { background:#666; color:#eee; }
+  body.dark #bottombar { background:#555; color:#eee; }
+  input.servings { width:40px; text-align:center; }
+</style>
+</head>
+<body>
+<header>FlavorFlow 🍓🥛🍑</header>
+
+<div id="sidebar">
+  <h2>Categories</h2>
+  <button onclick="filterCategory('breakfast')">Breakfast</button>
+  <button onclick="filterCategory('lunch')">Lunch</button>
+  <button onclick="filterCategory('dinner')">Dinner</button>
+  <button onclick="filterCategory('snacks')">Snacks</button>
+  <button onclick="filterCategory('dessert')">Dessert</button>
+  <hr>
+  <h2>Other</h2>
+  <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+  <button onclick="surpriseMe()">🎲 Surprise Me</button>
+</div>
+
+<div id="filters">
+  <button onclick="filterDiet('vegetarian')">Vegetarian</button>
+  <button onclick="filterDiet('vegan')">Vegan</button>
+  <button onclick="filterDiet('jain')">Jain</button>
+  <button onclick="filterDiet('healthy')">Healthy</button>
+  <button onclick="clearFilters()">Clear Filters</button>
+</div>
+
+<div id="main">
+
+<!-- --------------- CHUNK 1: Indian Recipes 1–25 (FULL) --------------- -->
+
+<!-- 1. Masala Dosa -->
+<div class="recipe-card" data-category="breakfast" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Masala Dosa</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge breakfast">Breakfast</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'masala-dosa')"></p>
+      <p>Prep: 12 hr | Cook: 30 min | Total: 12 hr 30 min</p>
+    </div>
+    <div class="card-back" id="masala-dosa">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup rice (200g / 1 cup)</li>
+        <li>1/3 cup urad dal (70g / 1/3 cup)</li>
+        <li>1/2 tsp fenugreek seeds</li>
+        <li>Salt to taste</li>
+        <li>1 tsp oil</li>
+        <li>2 boiled potatoes (~300g / 2 medium), mashed</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1 tsp mustard seeds</li>
+        <li>1–2 green chilies, chopped</li>
+        <li>8–10 curry leaves</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Soak rice & dal for 6–8 hrs.</li>
+        <li>Grind into smooth batter, add salt, ferment overnight.</li>
+        <li>Prepare potato filling with turmeric, mustard seeds, green chilies, curry leaves.</li>
+        <li>Cook dosa on non-stick pan, add filling, fold, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Masala Dosa')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Paneer Butter Masala -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Paneer Butter Masala</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'paneer-butter-masala')"></p>
+      <p>Prep: 15 min | Cook: 30 min | Total: 45 min</p>
+    </div>
+    <div class="card-back" id="paneer-butter-masala">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>250g paneer / 9 oz, cubed</li>
+        <li>2 tbsp butter / 28g</li>
+        <li>1 cup tomato puree / 240ml</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1 tsp red chili powder</li>
+        <li>1 tsp garam masala</li>
+        <li>1/4 cup cream / 60ml</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat butter, add ginger paste, cook 1 min.</li>
+        <li>Add tomato puree and spices, simmer 10 min.</li>
+        <li>Add paneer cubes, cook 5–7 min.</li>
+        <li>Stir in cream, cook 2 more min.</li>
+        <li>Garnish with coriander, serve hot with naan or rice.</li>
+      </ol>
+      <button onclick="addFavorite('Paneer Butter Masala')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Chole (Chickpea Curry) -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Chole (Chickpea Curry)</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'chole')"></p>
+      <p>Prep: 10 min | Cook: 40 min | Total: 50 min</p>
+    </div>
+    <div class="card-back" id="chole">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup chickpeas / 200g, soaked overnight</li>
+        <li>2 tbsp oil / 28g</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1 onion (~100g / 1 medium), chopped</li>
+        <li>2 tomatoes (~200g / 2 medium), pureed</li>
+        <li>1 tsp ginger paste</li>
+        <li>1 tsp turmeric</li>
+        <li>1 tsp red chili powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1 tsp garam masala</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Boil chickpeas until soft (20–25 min in pressure cooker).</li>
+        <li>Heat oil, add cumin seeds, sauté 30 sec.</li>
+        <li>Add onions, cook until golden.</li>
+        <li>Add ginger paste, sauté 1 min.</li>
+        <li>Add tomato puree & spices, simmer 10 min.</li>
+        <li>Add chickpeas, cook 10–15 min, garnish coriander.</li>
+      </ol>
+      <button onclick="addFavorite('Chole')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Poha (Flattened Rice) -->
+<div class="recipe-card" data-category="breakfast" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Poha</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge breakfast">Breakfast</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'poha')"></p>
+      <p>Prep: 5 min | Cook: 10 min | Total: 15 min</p>
+    </div>
+    <div class="card-back" id="poha">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup poha (flattened rice) / 100g</li>
+        <li>1 tsp oil</li>
+        <li>1/2 tsp mustard seeds</li>
+        <li>1 green chili, chopped</li>
+        <li>1 small onion (~50g), optional</li>
+        <li>1/4 tsp turmeric</li>
+        <li>Salt to taste</li>
+        <li>1 tbsp peanuts / 15g</li>
+        <li>1 tsp lemon juice</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Rinse poha, drain, keep aside.</li>
+        <li>Heat oil, add mustard seeds & peanuts, sauté 1 min.</li>
+        <li>Add onions & chili, cook 2 min.</li>
+        <li>Add turmeric & salt, mix poha gently.</li>
+        <li>Cook 2–3 min, garnish with lemon juice & coriander.</li>
+      </ol>
+      <button onclick="addFavorite('Poha')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Upma (Semolina Porridge) -->
+<div class="recipe-card" data-category="breakfast" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Upma</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge breakfast">Breakfast</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'upma')"></p>
+      <p>Prep: 5 min | Cook: 15 min | Total: 20 min</p>
+    </div>
+    <div class="card-back" id="upma">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup semolina / 150g</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>1 tsp mustard seeds</li>
+        <li>1 green chili, chopped</li>
+        <li>1 small onion (~50g), chopped</li>
+        <li>1/2 tsp turmeric</li>
+        <li>2 cups water / 480ml</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Dry roast semolina until light golden, set aside.</li>
+        <li>Heat oil, add mustard seeds & onions, sauté 2 min.</li>
+        <li>Add green chili & turmeric, cook 1 min.</li>
+        <li>Add water & salt, bring to boil.</li>
+        <li>Add roasted semolina slowly, stirring continuously.</li>
+        <li>Cook 2–3 min until thickened, garnish coriander, serve.</li>
+      </ol>
+      <button onclick="addFavorite('Upma')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. Aloo Gobi -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Aloo Gobi</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'aloo-gobi')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="aloo-gobi">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 potatoes (~300g), peeled & cubed</li>
+        <li>1 medium cauliflower (~300g), cut into florets</li>
+        <li>2 tbsp oil / 28g</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1 onion (~100g), chopped</li>
+        <li>1 tsp ginger paste</li>
+        <li>1 tsp turmeric</li>
+        <li>1 tsp coriander powder</li>
+        <li>1 tsp cumin powder</li>
+        <li>1/2 tsp red chili powder</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, add cumin seeds and onions, sauté 2–3 min.</li>
+        <li>Add ginger paste and spices, sauté 1 min.</li>
+        <li>Add potatoes & cauliflower, mix well.</li>
+        <li>Cover and cook 15–20 min until veggies tender.</li>
+        <li>Garnish with coriander, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Aloo Gobi')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 7. Dal Tadka -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Dal Tadka</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'dal-tadka')"></p>
+      <p>Prep: 10 min | Cook: 25 min | Total: 35 min</p>
+    </div>
+    <div class="card-back" id="dal-tadka">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup toor dal / pigeon peas / 200g</li>
+        <li>3 cups water / 720ml</li>
+        <li>1 tsp turmeric</li>
+        <li>Salt to taste</li>
+        <li>2 tsp ghee / 10g</li>
+        <li>1 tsp cumin seeds</li>
+        <li>2 dry red chilies</li>
+        <li>1 tsp ginger paste</li>
+        <li>1 tsp garlic paste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Rinse dal, boil with water, turmeric, salt until soft (20–25 min).</li>
+        <li>Heat ghee, add cumin seeds, dry chilies, ginger-garlic paste, sauté 1–2 min.</li>
+        <li>Pour tempering over cooked dal, simmer 2–3 min.</li>
+        <li>Garnish with coriander, serve with rice or roti.</li>
+      </ol>
+      <button onclick="addFavorite('Dal Tadka')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 8. Vegetable Pulao -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Vegetable Pulao</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'vegetable-pulao')"></p>
+      <p>Prep: 10 min | Cook: 25 min | Total: 35 min</p>
+    </div>
+    <div class="card-back" id="vegetable-pulao">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup basmati rice / 200g</li>
+        <li>2 cups water / 480ml</li>
+        <li>1/2 cup carrots, diced (~50g)</li>
+        <li>1/2 cup beans, chopped (~50g)</li>
+        <li>1/2 cup peas (~50g)</li>
+        <li>1 onion (~100g), sliced</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1 bay leaf</li>
+        <li>1/4 tsp turmeric</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Rinse rice, soak 20 min.</li>
+        <li>Heat oil, add cumin seeds, bay leaf, sauté 1 min.</li>
+        <li>Add onions, sauté until translucent.</li>
+        <li>Add vegetables & spices, cook 2–3 min.</li>
+        <li>Add rice, water, salt, bring to boil.</li>
+        <li>Cover, simmer 15–20 min until water absorbed.</li>
+      </ol>
+      <button onclick="addFavorite('Vegetable Pulao')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 9. Rajma (Kidney Bean Curry) -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Rajma</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'rajma')"></p>
+      <p>Prep: 10 min | Cook: 45 min | Total: 55 min</p>
+    </div>
+    <div class="card-back" id="rajma">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup kidney beans / 200g, soaked overnight</li>
+        <li>2 cups water / 480ml</li>
+        <li>2 tbsp oil / 28g</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1 onion (~100g), chopped</li>
+        <li>1 tsp ginger paste</li>
+        <li>2 tomatoes (~200g), pureed</li>
+        <li>1 tsp turmeric</li>
+        <li>1 tsp chili powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1 tsp garam masala</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Boil rajma until soft (20–25 min in pressure cooker).</li>
+        <li>Heat oil, add cumin seeds & onions, sauté golden.</li>
+        <li>Add ginger paste, sauté 1 min, then tomato puree & spices.</li>
+        <li>Add boiled rajma, simmer 10–15 min.</li>
+        <li>Garnish with coriander, serve with rice.</li>
+      </ol>
+      <button onclick="addFavorite('Rajma')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 10. Baingan Bharta -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Baingan Bharta</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="3" onchange="updateServings(this,'baingan-bharta')"></p>
+      <p>Prep: 10 min | Cook: 30 min | Total: 40 min</p>
+    </div>
+    <div class="card-back" id="baingan-bharta">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 large eggplant (~400g)</li>
+        <li>2 tbsp oil / 28g</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1 onion (~100g), chopped</li>
+        <li>2 tomatoes (~200g), chopped</li>
+        <li>1 tsp turmeric</li>
+        <li>1 tsp chili powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Roast eggplant directly on flame or oven until soft, peel, mash.</li>
+        <li>Heat oil, add cumin seeds & onions, sauté golden.</li>
+        <li>Add tomatoes & spices, cook 5 min.</li>
+        <li>Add mashed eggplant, cook 5–7 min.</li>
+        <li>Garnish with coriander, serve with roti.</li>
+      </ol>
+      <button onclick="addFavorite('Baingan Bharta')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- 11. Bhindi Masala -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Bhindi Masala</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="3" onchange="updateServings(this,'bhindi-masala')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="bhindi-masala">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>250g bhindi / okra, chopped</li>
+        <li>2 tbsp oil / 28g</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1 onion (~100g), chopped</li>
+        <li>2 tomatoes (~200g), chopped</li>
+        <li>1 tsp turmeric</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp chili powder</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, add cumin seeds, sauté 30 sec.</li>
+        <li>Add onions, cook 2–3 min.</li>
+        <li>Add tomatoes & spices, cook 5 min.</li>
+        <li>Add bhindi, cook 10–12 min until tender, stirring occasionally.</li>
+        <li>Garnish with coriander, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Bhindi Masala')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 12. Matar Paneer -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Matar Paneer</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'matar-paneer')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="matar-paneer">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>200g paneer, cubed</li>
+        <li>1 cup peas (~150g)</li>
+        <li>2 tomatoes (~200g), pureed</li>
+        <li>1 onion (~100g), chopped</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1 tsp chili powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, sauté onions until golden.</li>
+        <li>Add ginger paste, cook 1 min.</li>
+        <li>Add tomato puree & spices, cook 5 min.</li>
+        <li>Add peas & paneer, simmer 10 min.</li>
+        <li>Sprinkle garam masala, garnish with coriander, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Matar Paneer')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 13. Aloo Paratha -->
+<div class="recipe-card" data-category="breakfast" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Aloo Paratha</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge breakfast">Breakfast</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'aloo-paratha')"></p>
+      <p>Prep: 15 min | Cook: 15 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="aloo-paratha">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 cups wheat flour / 250g</li>
+        <li>2 potatoes (~300g), boiled & mashed</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1 tsp chili powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>2 tbsp oil / 28g</li>
+        <li>Salt to taste</li>
+        <li>Water for kneading dough</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Knead flour & water into soft dough, rest 20 min.</li>
+        <li>Mix mashed potatoes with spices & salt.</li>
+        <li>Roll dough balls, stuff with potato filling, seal, roll again.</li>
+        <li>Cook on hot griddle with little oil until golden both sides.</li>
+        <li>Serve hot with yogurt or pickle.</li>
+      </ol>
+      <button onclick="addFavorite('Aloo Paratha')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 14. Pani Puri (Gol Gappa) -->
+<div class="recipe-card" data-category="snacks" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Pani Puri</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge snacks">Snacks</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'pani-puri')"></p>
+      <p>Prep: 20 min | Cook: 20 min | Total: 40 min</p>
+    </div>
+    <div class="card-back" id="pani-puri">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>20 puris / small hollow spheres</li>
+        <li>1 cup boiled chickpeas / 200g</li>
+        <li>1 cup boiled potatoes / 200g, diced</li>
+        <li>1 cup tamarind water / 240ml</li>
+        <li>1/2 cup mint-coriander chutney / 120ml</li>
+        <li>Salt & chili powder to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Mix chickpeas & potatoes with spices.</li>
+        <li>Fill puris with mixture.</li>
+        <li>Dip in tamarind water and mint chutney, serve immediately.</li>
+      </ol>
+      <button onclick="addFavorite('Pani Puri')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 15. Dhokla -->
+<div class="recipe-card" data-category="snacks" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Dhokla</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge snacks">Snacks</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'dhokla')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="dhokla">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup gram flour / 120g</li>
+        <li>1/2 cup yogurt / 120ml</li>
+        <li>1 tsp Eno fruit salt</li>
+        <li>1 tsp sugar</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1 tsp salt</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>1 tsp mustard seeds</li>
+        <li>8–10 curry leaves</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Mix gram flour, yogurt, sugar, turmeric & salt to a smooth batter.</li>
+        <li>Add Eno just before steaming, mix gently.</li>
+        <li>Steam 15–20 min until set.</li>
+        <li>Tempering: heat oil, add mustard seeds & curry leaves, pour over dhokla.</li>
+        <li>Cut into pieces, serve warm.</li>
+      </ol>
+      <button onclick="addFavorite('Dhokla')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 16. Idli -->
+<div class="recipe-card" data-category="breakfast" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Idli</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge breakfast">Breakfast</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'idli')"></p>
+      <p>Prep: 12 hr | Cook: 10 min | Total: 12 hr 10 min</p>
+    </div>
+    <div class="card-back" id="idli">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup rice / 200g</li>
+        <li>1/3 cup urad dal / 70g</li>
+        <li>1/2 tsp fenugreek seeds</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Soak rice & dal 6–8 hr, grind to smooth batter, ferment overnight.</li>
+        <li>Pour batter into idli molds, steam 10–12 min.</li>
+        <li>Remove, serve with chutney or sambar.</li>
+      </ol>
+      <button onclick="addFavorite('Idli')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 17. Sambhar -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Sambhar</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'sambhar')"></p>
+      <p>Prep: 10 min | Cook: 25 min | Total: 35 min</p>
+    </div>
+    <div class="card-back" id="sambhar">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup toor dal / 200g</li>
+        <li>1 cup tamarind water / 240ml</li>
+        <li>1 cup vegetables (~150g: drumsticks, carrots, beans)</li>
+        <li>1 onion (~100g), chopped</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>1 tsp mustard seeds</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1 tsp sambhar powder</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Cook dal until soft.</li>
+        <li>Add vegetables, tamarind water, turmeric, sambhar powder, cook 10–15 min.</li>
+        <li>Temper with mustard seeds in oil, pour over sambhar.</li>
+        <li>Garnish coriander, serve hot with idli or rice.</li>
+      </ol>
+      <button onclick="addFavorite('Sambhar')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 18. Lemon Rice -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Lemon Rice</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="3" onchange="updateServings(this,'lemon-rice')"></p>
+      <p>Prep: 5 min | Cook: 15 min | Total: 20 min</p>
+    </div>
+    <div class="card-back" id="lemon-rice">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup cooked rice / 200g</li>
+        <li>1 tbsp oil / 14g</li>
+        <li>1 tsp mustard seeds</li>
+        <li>2 green chilies, chopped</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1 tbsp lemon juice / 15ml</li>
+        <li>2 tbsp chopped coriander</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, add mustard seeds, green chilies, sauté 1 min.</li>
+        <li>Add turmeric, then cooked rice, mix gently.</li>
+        <li>Turn off heat, add lemon juice & coriander, serve warm.</li>
+      </ol>
+      <button onclick="addFavorite('Lemon Rice')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 19. Vegetable Biryani -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Vegetable Biryani</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'vegetable-biryani')"></p>
+      <p>Prep: 15 min | Cook: 30 min | Total: 45 min</p>
+    </div>
+    <div class="card-back" id="vegetable-biryani">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup basmati rice / 200g</li>
+        <li>2 cups mixed vegetables / 200g (carrots, beans, peas)</li>
+        <li>1 onion (~100g), sliced</li>
+        <li>2 tbsp oil / 28g</li>
+        <li>1 tsp ginger paste</li>
+        <li>1 tsp garlic paste</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1 tsp garam masala</li>
+        <li>Salt to taste</li>
+        <li>2 cups water / 480ml</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Rinse & soak rice 20 min.</li>
+        <li>Heat oil, sauté onions, ginger & garlic paste until golden.</li>
+        <li>Add vegetables & spices, cook 5 min.</li>
+        <li>Add rice & water, bring to boil.</li>
+        <li>Cover, simmer 15–20 min until water absorbed.</li>
+        <li>Garnish with coriander, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Vegetable Biryani')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 20. Pav Bhaji -->
+<div class="recipe-card" data-category="snacks" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Pav Bhaji</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge snacks">Snacks</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'pav-bhaji')"></p>
+      <p>Prep: 15 min | Cook: 20 min | Total: 35 min</p>
+    </div>
+    <div class="card-back" id="pav-bhaji">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 cups mixed vegetables (~300g, boiled & mashed)</li>
+        <li>2 tbsp butter / 28g</li>
+        <li>2 tsp pav bhaji masala</li>
+        <li>Salt to taste</li>
+        <li>Pav bread / 8 buns</li>
+        <li>1 lemon, cut into wedges</li>
+        <li>Chopped onions & coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Mash vegetables, mix with butter, masala & salt, cook 10–12 min.</li>
+        <li>Serve hot with pav, garnished with onions, coriander, and lemon wedges.</li>
+      </ol>
+      <button onclick="addFavorite('Pav Bhaji')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 21. Chole (Chickpea Curry) -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Chole</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'chole')"></p>
+      <p>Prep: 10 min | Cook: 30 min | Total: 40 min</p>
+    </div>
+    <div class="card-back" id="chole">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup chickpeas / 200g, soaked overnight</li>
+        <li>2 tomatoes (~200g), pureed</li>
+        <li>1 onion (~100g), chopped</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>1 tsp ginger paste</li>
+        <li>1 tsp garlic paste</li>
+        <li>1 tsp chole masala</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1/2 tsp chili powder</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Boil chickpeas until soft.</li>
+        <li>Heat oil, sauté onions, ginger, garlic until golden.</li>
+        <li>Add tomato puree & spices, cook 5 min.</li>
+        <li>Add chickpeas, simmer 10–15 min.</li>
+        <li>Garnish coriander, serve with rice or bhature.</li>
+      </ol>
+      <button onclick="addFavorite('Chole')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 22. Masoor Dal -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Masoor Dal</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'masoor-dal')"></p>
+      <p>Prep: 5 min | Cook: 20 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="masoor-dal">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup red lentils / 200g</li>
+        <li>3 cups water / 720ml</li>
+        <li>1 tsp turmeric</li>
+        <li>1 onion (~100g), chopped</li>
+        <li>1 tomato (~100g), chopped</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp chili powder</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Boil lentils with water, turmeric & salt until soft.</li>
+        <li>Heat oil, add cumin seeds, onions, sauté 2 min.</li>
+        <li>Add tomatoes & chili powder, cook 3–4 min.</li>
+        <li>Pour tempering over cooked dal, simmer 2–3 min.</li>
+        <li>Garnish with coriander, serve with rice or roti.</li>
+      </ol>
+      <button onclick="addFavorite('Masoor Dal')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 23. Paneer Butter Masala -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Paneer Butter Masala</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'paneer-butter-masala')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="paneer-butter-masala">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>200g paneer, cubed</li>
+        <li>2 tbsp butter / 28g</li>
+        <li>1 onion (~100g), chopped</li>
+        <li>2 tomatoes (~200g), pureed</li>
+        <li>1 tsp ginger-garlic paste</li>
+        <li>1/2 tsp chili powder</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1 tsp garam masala</li>
+        <li>2 tbsp cream / 30ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Melt butter, sauté onions until golden.</li>
+        <li>Add ginger-garlic paste, sauté 1 min.</li>
+        <li>Add tomato puree & spices, cook 5 min.</li>
+        <li>Add paneer, simmer 10 min, stir in cream.</li>
+        <li>Serve hot with naan or rice.</li>
+      </ol>
+      <button onclick="addFavorite('Paneer Butter Masala')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 24. Palak Paneer -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Palak Paneer</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'palak-paneer')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="palak-paneer">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>200g paneer, cubed</li>
+        <li>250g spinach, blanched & pureed</li>
+        <li>1 onion (~100g), chopped</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1 tsp ginger-garlic paste</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1/2 tsp chili powder</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, sauté cumin & onions until golden.</li>
+        <li>Add ginger-garlic paste & spices, cook 1–2 min.</li>
+        <li>Add spinach puree, simmer 5–7 min.</li>
+        <li>Add paneer cubes, cook 5 min.</li>
+        <li>Serve hot with roti or naan.</li>
+      </ol>
+      <button onclick="addFavorite('Palak Paneer')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 25. Vegetable Upma -->
+<div class="recipe-card" data-category="breakfast" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Vegetable Upma</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge breakfast">Breakfast</span>
+      <p>Servings: <input class="servings" type="number" value="3" onchange="updateServings(this,'vegetable-upma')"></p>
+      <p>Prep: 5 min | Cook: 15 min | Total: 20 min</p>
+    </div>
+    <div class="card-back" id="vegetable-upma">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup semolina / 150g</li>
+        <li>1 cup mixed vegetables / 100g (carrots, peas, beans)</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>1 tsp mustard seeds</li>
+        <li>1–2 green chilies, chopped</li>
+        <li>1/2 tsp turmeric</li>
+        <li>2 cups water / 480ml</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Roast semolina lightly, set aside.</li>
+        <li>Heat oil, add mustard seeds & chilies, sauté 1 min.</li>
+        <li>Add vegetables & turmeric, cook 2–3 min.</li>
+        <li>Add water & salt, bring to boil.</li>
+        <li>Slowly add semolina, stirring continuously to avoid lumps.</li>
+        <li>Cook 5–7 min until water absorbed, garnish with coriander, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Vegetable Upma')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- --------------- END OF CHUNK 1 (Recipes 1–25 COMPLETE) --------------- -->
+
+
+
+
+
+
+
+  
+
+<!-- --------------- CHUNK 2: Indian Recipes 26–50 --------------- -->
+
+<!-- --------------- CHUNK 2: Recipes 26–50 (International, FULL) --------------- -->
+
+<!-- 26. Caprese Salad -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Caprese Salad</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'caprese-salad')"></p>
+      <p>Prep: 10 min | Cook: 0 min | Total: 10 min</p>
+    </div>
+    <div class="card-back" id="caprese-salad">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 medium tomatoes, sliced</li>
+        <li>100g fresh mozzarella, sliced</li>
+        <li>Fresh basil leaves, 10–12</li>
+        <li>2 tsp olive oil / 10ml</li>
+        <li>1 tsp balsamic glaze</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Arrange tomato and mozzarella slices alternately on a plate.</li>
+        <li>Place basil leaves between slices.</li>
+        <li>Drizzle olive oil and balsamic glaze on top.</li>
+        <li>Season with salt and pepper, serve immediately.</li>
+      </ol>
+      <button onclick="addFavorite('Caprese Salad')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 27. Veggie Stir-Fry -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Stir-Fry</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="3" onchange="updateServings(this,'veggie-stirfry')"></p>
+      <p>Prep: 10 min | Cook: 10 min | Total: 20 min</p>
+    </div>
+    <div class="card-back" id="veggie-stirfry">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup broccoli florets / 100g</li>
+        <li>1 cup bell peppers, sliced / 100g</li>
+        <li>1 carrot, sliced / 50g</li>
+        <li>2 tsp soy sauce / 10ml</li>
+        <li>1 tsp sesame oil / 5ml</li>
+        <li>2 cloves garlic, minced</li>
+        <li>1 tsp ginger, minced</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat sesame oil in a wok, sauté garlic and ginger 1 min.</li>
+        <li>Add vegetables, stir-fry 5–7 min until tender-crisp.</li>
+        <li>Add soy sauce, season with salt & pepper.</li>
+        <li>Serve hot with rice or noodles.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Stir-Fry')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 28. Greek Salad -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Greek Salad</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'greek-salad')"></p>
+      <p>Prep: 10 min | Cook: 0 min | Total: 10 min</p>
+    </div>
+    <div class="card-back" id="greek-salad">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cucumber, diced</li>
+        <li>1 tomato, diced</li>
+        <li>1/4 red onion, thinly sliced</li>
+        <li>50g feta cheese, crumbled</li>
+        <li>10–12 olives, sliced</li>
+        <li>2 tsp olive oil / 10ml</li>
+        <li>1 tsp lemon juice / 5ml</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Mix cucumber, tomato, onion, feta, and olives in a bowl.</li>
+        <li>Drizzle olive oil and lemon juice, season with salt & pepper.</li>
+        <li>Toss gently, serve chilled.</li>
+      </ol>
+      <button onclick="addFavorite('Greek Salad')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 29. Veggie Tacos -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Tacos</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'veggie-tacos')"></p>
+      <p>Prep: 10 min | Cook: 10 min | Total: 20 min</p>
+    </div>
+    <div class="card-back" id="veggie-tacos">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>8 small tortillas</li>
+        <li>1 cup black beans / 150g, cooked</li>
+        <li>1 cup bell peppers, chopped / 100g</li>
+        <li>1/2 cup corn / 80g</li>
+        <li>1 avocado, sliced</li>
+        <li>2 tbsp salsa / 30ml</li>
+        <li>1 tsp olive oil / 5ml</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat olive oil, sauté bell peppers & corn 5 min.</li>
+        <li>Warm tortillas.</li>
+        <li>Assemble tacos: beans, veggies, avocado, top with salsa.</li>
+        <li>Serve immediately.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Tacos')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 30. Margherita Pizza -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Margherita Pizza</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'margherita-pizza')"></p>
+      <p>Prep: 15 min | Cook: 10 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="margherita-pizza">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 pizza base</li>
+        <li>100g mozzarella cheese, shredded</li>
+        <li>1/2 cup tomato sauce / 120ml</li>
+        <li>Fresh basil leaves, 5–6</li>
+        <li>1 tsp olive oil / 5ml</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Preheat oven to 200°C / 390°F.</li>
+        <li>Spread tomato sauce on pizza base.</li>
+        <li>Top with mozzarella, basil leaves, drizzle olive oil.</li>
+        <li>Bake 8–10 min until cheese melts and crust is golden.</li>
+        <li>Serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Margherita Pizza')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 31. Vegetable Lasagna -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Vegetable Lasagna</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'vegetable-lasagna')"></p>
+      <p>Prep: 20 min | Cook: 30 min | Total: 50 min</p>
+    </div>
+    <div class="card-back" id="vegetable-lasagna">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>6 lasagna sheets</li>
+        <li>1 cup ricotta cheese / 200g</li>
+        <li>1 cup spinach / 100g, chopped</li>
+        <li>1 cup tomato sauce / 240ml</li>
+        <li>100g mozzarella cheese, shredded</li>
+        <li>1/2 tsp oregano</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Preheat oven to 180°C / 356°F.</li>
+        <li>Layer lasagna sheets, ricotta-spinach mixture, tomato sauce & mozzarella.</li>
+        <li>Repeat layers, top with mozzarella & oregano.</li>
+        <li>Bake 25–30 min until golden.</li>
+        <li>Serve warm.</li>
+      </ol>
+      <button onclick="addFavorite('Vegetable Lasagna')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 32. Falafel Wrap -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Falafel Wrap</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'falafel-wrap')"></p>
+      <p>Prep: 15 min | Cook: 10 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="falafel-wrap">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>4 pita breads</li>
+        <li>8 falafel balls, baked or fried</li>
+        <li>1/2 cup lettuce / 50g, chopped</li>
+        <li>1/4 cup tomato, diced</li>
+        <li>2 tbsp tahini sauce / 30ml</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Warm pita breads.</li>
+        <li>Place lettuce, tomato, and falafel balls in pita.</li>
+        <li>Drizzle tahini sauce, season with salt & pepper.</li>
+        <li>Wrap and serve immediately.</li>
+      </ol>
+      <button onclick="addFavorite('Falafel Wrap')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 33. Veggie Burger -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Burger</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'veggie-burger')"></p>
+      <p>Prep: 15 min | Cook: 10 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="veggie-burger">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 burger buns</li>
+        <li>2 veggie patties</li>
+        <li>Lettuce, tomato, cucumber slices as desired</li>
+        <li>2 tsp ketchup / 10ml</li>
+        <li>1 tsp mustard / 5ml</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Toast buns lightly.</li>
+        <li>Place patty on bottom bun, add veggies & sauces.</li>
+        <li>Top with bun, serve immediately.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Burger')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 34. Veggie Sushi Rolls -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Sushi Rolls</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'veggie-sushi')"></p>
+      <p>Prep: 20 min | Cook: 10 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="veggie-sushi">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 cups sushi rice / 400g, cooked & seasoned</li>
+        <li>4 sheets nori</li>
+        <li>1/2 cucumber, julienned</li>
+        <li>1/2 carrot, julienned</li>
+        <li>1 avocado, sliced</li>
+        <li>2 tsp soy sauce / 10ml</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Place nori on bamboo mat, spread rice evenly.</li>
+        <li>Add veggies in a line along one edge.</li>
+        <li>Roll tightly, slice into pieces.</li>
+        <li>Serve with soy sauce.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Sushi Rolls')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 35. Ratatouille -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Ratatouille</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'ratatouille')"></p>
+      <p>Prep: 15 min | Cook: 35 min | Total: 50 min</p>
+    </div>
+    <div class="card-back" id="ratatouille">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 zucchini, sliced / 100g</li>
+        <li>1 eggplant, sliced / 150g</li>
+        <li>1 bell pepper, sliced / 100g</li>
+        <li>1 tomato, sliced / 100g</li>
+        <li>2 tsp olive oil / 10ml</li>
+        <li>1 tsp garlic, minced</li>
+        <li>Salt & pepper to taste</li>
+        <li>Fresh thyme or basil for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Preheat oven 180°C / 356°F.</li>
+        <li>Layer vegetables in a baking dish.</li>
+        <li>Drizzle olive oil, add garlic, salt & pepper.</li>
+        <li>Bake 30–35 min until tender.</li>
+        <li>Garnish, serve warm.</li>
+      </ol>
+      <button onclick="addFavorite('Ratatouille')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- --------------- CHUNK 2B: Recipes 36–50 (International, FULL) --------------- -->
+
+<!-- 36. Hummus & Veggie Bowl -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Hummus & Veggie Bowl</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'hummus-bowl')"></p>
+      <p>Prep: 10 min | Cook: 0 min | Total: 10 min</p>
+    </div>
+    <div class="card-back" id="hummus-bowl">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup hummus / 250g</li>
+        <li>1/2 cup cherry tomatoes / 75g, halved</li>
+        <li>1/2 cucumber, sliced / 50g</li>
+        <li>1/4 cup olives / 40g</li>
+        <li>1/4 cup roasted chickpeas / 40g</li>
+        <li>1 tsp olive oil / 5ml</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Spread hummus at the bottom of a bowl.</li>
+        <li>Arrange veggies and chickpeas on top.</li>
+        <li>Drizzle olive oil, season with salt & pepper.</li>
+        <li>Serve immediately.</li>
+      </ol>
+      <button onclick="addFavorite('Hummus & Veggie Bowl')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 37. Veggie Quesadilla -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Quesadilla</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'veggie-quesadilla')"></p>
+      <p>Prep: 10 min | Cook: 5 min | Total: 15 min</p>
+    </div>
+    <div class="card-back" id="veggie-quesadilla">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 large tortillas</li>
+        <li>1/2 cup bell peppers, sliced / 50g</li>
+        <li>1/2 cup mushrooms, sliced / 50g</li>
+        <li>1/2 cup cheddar cheese, shredded / 50g</li>
+        <li>1 tsp olive oil / 5ml</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat olive oil in a pan, sauté veggies 3–4 min.</li>
+        <li>Place veggies on half of tortilla, sprinkle cheese.</li>
+        <li>Fold tortilla, cook 2–3 min per side until cheese melts.</li>
+        <li>Serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Quesadilla')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 38. Minestrone Soup -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Minestrone Soup</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'minestrone-soup')"></p>
+      <p>Prep: 15 min | Cook: 25 min | Total: 40 min</p>
+    </div>
+    <div class="card-back" id="minestrone-soup">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 tbsp olive oil / 15ml</li>
+        <li>1 onion, diced</li>
+        <li>2 cloves garlic, minced</li>
+        <li>2 carrots, diced / 100g</li>
+        <li>2 celery stalks, diced / 100g</li>
+        <li>1 zucchini, diced / 100g</li>
+        <li>1 cup green beans / 100g, chopped</li>
+        <li>1 can diced tomatoes / 400g</li>
+        <li>4 cups vegetable broth / 1L</li>
+        <li>1/2 cup pasta / 50g</li>
+        <li>1 tsp dried oregano</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat olive oil in a pot, sauté onion & garlic 2 min.</li>
+        <li>Add carrots, celery, cook 3–4 min.</li>
+        <li>Add zucchini, green beans, diced tomatoes, broth, oregano, salt & pepper.</li>
+        <li>Bring to boil, add pasta, cook 8–10 min until tender.</li>
+        <li>Serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Minestrone Soup')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 39. Paneer Tikka Wrap (Indian fusion) -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Paneer Tikka Wrap</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'paneer-tikka-wrap')"></p>
+      <p>Prep: 15 min | Cook: 10 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="paneer-tikka-wrap">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>100g paneer, cubed</li>
+        <li>1 tsp yogurt / 5ml</li>
+        <li>1/2 tsp turmeric</li>
+        <li>1/2 tsp red chili powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>1 tsp olive oil / 5ml</li>
+        <li>1 tortilla wrap</li>
+        <li>Lettuce & onion slices as desired</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Mix paneer with yogurt and spices, marinate 10 min.</li>
+        <li>Heat oil, cook paneer 5–6 min until golden.</li>
+        <li>Place lettuce, onion, and paneer on tortilla, wrap tightly.</li>
+        <li>Serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Paneer Tikka Wrap')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 40. Mushroom Risotto -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Mushroom Risotto</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'mushroom-risotto')"></p>
+      <p>Prep: 10 min | Cook: 30 min | Total: 40 min</p>
+    </div>
+    <div class="card-back" id="mushroom-risotto">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup arborio rice / 200g</li>
+        <li>200g mushrooms, sliced</li>
+        <li>1 small onion, diced</li>
+        <li>2 cloves garlic, minced</li>
+        <li>3 cups vegetable broth / 750ml</li>
+        <li>2 tsp olive oil / 10ml</li>
+        <li>2 tbsp parmesan cheese / 20g</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat olive oil, sauté onion & garlic 2 min.</li>
+        <li>Add mushrooms, cook 5 min.</li>
+        <li>Add rice, stir 1–2 min, gradually add broth stirring continuously.</li>
+        <li>Cook 20–25 min until rice is creamy.</li>
+        <li>Stir in parmesan, season, serve warm.</li>
+      </ol>
+      <button onclick="addFavorite('Mushroom Risotto')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 41. Sweet Potato Curry -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Sweet Potato Curry</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'sweet-potato-curry')"></p>
+      <p>Prep: 10 min | Cook: 25 min | Total: 35 min</p>
+    </div>
+    <div class="card-back" id="sweet-potato-curry">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 medium sweet potatoes, cubed / 400g</li>
+        <li>1 onion, diced</li>
+        <li>2 cloves garlic, minced</li>
+        <li>1 tsp ginger, minced</li>
+        <li>1 tsp turmeric</li>
+        <li>1 tsp cumin powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1 cup coconut milk / 240ml</li>
+        <li>1 tsp olive oil / 5ml</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, sauté onion, garlic, ginger 2 min.</li>
+        <li>Add sweet potatoes, spices, stir 2 min.</li>
+        <li>Add coconut milk, simmer 20 min until tender.</li>
+        <li>Season, serve hot with rice or naan.</li>
+      </ol>
+      <button onclick="addFavorite('Sweet Potato Curry')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 42. Bruschetta -->
+<div class="recipe-card" data-category="snack" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Bruschetta</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge snack">Snack</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'bruschetta')"></p>
+      <p>Prep: 10 min | Cook: 5 min | Total: 15 min</p>
+    </div>
+    <div class="card-back" id="bruschetta">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 baguette, sliced</li>
+        <li>2 tomatoes, diced</li>
+        <li>2 cloves garlic, minced</li>
+        <li>1 tsp olive oil / 5ml</li>
+        <li>Fresh basil leaves, chopped 5–6</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Toast baguette slices lightly.</li>
+        <li>Mix tomatoes, garlic, basil, olive oil, salt & pepper.</li>
+        <li>Top each slice with tomato mixture.</li>
+        <li>Serve immediately.</li>
+      </ol>
+      <button onclick="addFavorite('Bruschetta')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 43. Stuffed Bell Peppers -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Stuffed Bell Peppers</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'stuffed-peppers')"></p>
+      <p>Prep: 15 min | Cook: 25 min | Total: 40 min</p>
+    </div>
+    <div class="card-back" id="stuffed-peppers">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>4 bell peppers, tops removed & seeded</li>
+        <li>1 cup cooked quinoa / 185g</li>
+        <li>1/2 cup corn / 80g</li>
+        <li>1/2 cup black beans / 100g</li>
+        <li>1/2 cup diced tomatoes / 100g</li>
+        <li>2 tsp olive oil / 10ml</li>
+        <li>1 tsp cumin powder</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Preheat oven to 180°C / 356°F.</li>
+        <li>Mix quinoa, corn, beans, tomatoes, olive oil, cumin, salt & pepper.</li>
+        <li>Stuff mixture into bell peppers, place in baking dish.</li>
+        <li>Bake 20–25 min until peppers are tender.</li>
+        <li>Serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Stuffed Bell Peppers')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- --------------- CHUNK 2C: Recipes 44–50 (International, FULL) --------------- -->
+
+<!-- 44. Caprese Salad -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Caprese Salad</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'caprese-salad')"></p>
+      <p>Prep: 10 min | Cook: 0 min | Total: 10 min</p>
+    </div>
+    <div class="card-back" id="caprese-salad">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 tomatoes, sliced / 200g</li>
+        <li>100g mozzarella, sliced</li>
+        <li>Fresh basil leaves / 10–12 leaves</li>
+        <li>1 tsp olive oil / 5ml</li>
+        <li>1 tsp balsamic glaze / 5ml</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Layer tomato slices, mozzarella, and basil alternately on a plate.</li>
+        <li>Drizzle olive oil and balsamic glaze.</li>
+        <li>Season with salt & pepper.</li>
+        <li>Serve immediately.</li>
+      </ol>
+      <button onclick="addFavorite('Caprese Salad')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 45. Falafel Wrap -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Falafel Wrap</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'falafel-wrap')"></p>
+      <p>Prep: 15 min | Cook: 10 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="falafel-wrap">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>4 falafel patties (store-bought or homemade)</li>
+        <li>2 tortilla wraps</li>
+        <li>1/2 cup lettuce / 50g</li>
+        <li>1/4 cup cucumber slices / 50g</li>
+        <li>2 tbsp tahini sauce / 30ml</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Warm falafel patties as per instructions.</li>
+        <li>Place lettuce, cucumber, and falafel on wrap.</li>
+        <li>Drizzle tahini sauce, wrap tightly.</li>
+        <li>Serve immediately.</li>
+      </ol>
+      <button onclick="addFavorite('Falafel Wrap')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 46. Greek Salad -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Greek Salad</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'greek-salad')"></p>
+      <p>Prep: 10 min | Cook: 0 min | Total: 10 min</p>
+    </div>
+    <div class="card-back" id="greek-salad">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cucumber, diced / 100g</li>
+        <li>2 tomatoes, diced / 200g</li>
+        <li>1/2 red onion, sliced</li>
+        <li>1/4 cup feta cheese / 50g</li>
+        <li>10–12 black olives</li>
+        <li>1 tsp olive oil / 5ml</li>
+        <li>1 tsp lemon juice / 5ml</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Combine cucumber, tomatoes, onion, olives in a bowl.</li>
+        <li>Drizzle olive oil and lemon juice.</li>
+        <li>Add feta cheese on top, season with salt & pepper.</li>
+        <li>Serve chilled.</li>
+      </ol>
+      <button onclick="addFavorite('Greek Salad')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 47. Veggie Fried Rice -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Fried Rice</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'veggie-fried-rice')"></p>
+      <p>Prep: 10 min | Cook: 15 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="veggie-fried-rice">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 cups cooked rice / 400g</li>
+        <li>1 cup mixed vegetables (carrots, peas, beans) / 150g</li>
+        <li>2 tsp soy sauce / 10ml</li>
+        <li>1 tsp sesame oil / 5ml</li>
+        <li>2 cloves garlic, minced</li>
+        <li>2 tsp olive oil / 10ml</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat olive oil, sauté garlic 1 min.</li>
+        <li>Add vegetables, cook 5–6 min.</li>
+        <li>Add rice, soy sauce, sesame oil, salt & pepper, stir 3–4 min.</li>
+        <li>Serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Fried Rice')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 48. Ratatouille -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Ratatouille</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'ratatouille')"></p>
+      <p>Prep: 15 min | Cook: 35 min | Total: 50 min</p>
+    </div>
+    <div class="card-back" id="ratatouille">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 zucchini, sliced / 100g</li>
+        <li>1 eggplant, sliced / 150g</li>
+        <li>2 tomatoes, sliced / 200g</li>
+        <li>1 onion, sliced</li>
+        <li>2 cloves garlic, minced</li>
+        <li>2 tsp olive oil / 10ml</li>
+        <li>1 tsp dried thyme</li>
+        <li>1 tsp dried oregano</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Preheat oven to 180°C / 356°F.</li>
+        <li>Layer vegetables in baking dish alternately.</li>
+        <li>Drizzle olive oil, sprinkle thyme, oregano, salt & pepper.</li>
+        <li>Bake 35 min until tender.</li>
+        <li>Serve warm.</li>
+      </ol>
+      <button onclick="addFavorite('Ratatouille')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 49. Lentil Soup -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Lentil Soup</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'lentil-soup')"></p>
+      <p>Prep: 10 min | Cook: 25 min | Total: 35 min</p>
+    </div>
+    <div class="card-back" id="lentil-soup">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup red lentils / 200g</li>
+        <li>1 onion, diced</li>
+        <li>2 carrots, diced / 100g</li>
+        <li>2 celery stalks, diced / 100g</li>
+        <li>2 cloves garlic, minced</li>
+        <li>1 tsp cumin powder</li>
+        <li>1 tsp olive oil / 5ml</li>
+        <li>4 cups vegetable broth / 1L</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat olive oil, sauté onion, garlic 2 min.</li>
+        <li>Add carrots, celery, cook 3–4 min.</li>
+        <li>Add lentils, broth, cumin, salt & pepper.</li>
+        <li>Simmer 20 min until lentils are tender.</li>
+        <li>Blend slightly for creamy texture if desired.</li>
+      </ol>
+      <button onclick="addFavorite('Lentil Soup')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 50. Veggie Sushi Rolls -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Sushi Rolls</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'veggie-sushi')"></p>
+      <p>Prep: 20 min | Cook: 0 min | Total: 20 min</p>
+    </div>
+    <div class="card-back" id="veggie-sushi">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>4 sheets nori</li>
+        <li>2 cups sushi rice, cooked / 400g</li>
+        <li>1/2 cucumber, julienned / 50g</li>
+        <li>1 carrot, julienned / 50g</li>
+        <li>1/2 avocado, sliced</li>
+        <li>Soy sauce for dipping</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Place nori sheet on bamboo mat.</li>
+        <li>Spread thin layer of rice, leaving 1 inch top edge.</li>
+        <li>Arrange cucumber, carrot, avocado in a line.</li>
+        <li>Roll tightly using bamboo mat, seal with water.</li>
+        <li>Slice into pieces, serve with soy sauce.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Sushi Rolls')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<!-- --------------- CHUNK 3: Indian Recipes 51–75 --------------- -->
+
+
+<!-- --------------- CHUNK 3: Indian Recipes 51–75 --------------- -->
+
+<!-- 51. Palak Paneer -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Palak Paneer</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'palak-paneer')"></p>
+      <p>Prep: 15 min | Cook: 25 min | Total: 40 min</p>
+    </div>
+    <div class="card-back" id="palak-paneer">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>250g paneer cubes</li>
+        <li>500g spinach leaves, washed</li>
+        <li>1 onion, finely chopped</li>
+        <li>1 tomato, pureed</li>
+        <li>1 tsp ginger paste</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+        <li>2 tbsp cream (optional)</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Blanch spinach in boiling water 2–3 min, then blend into smooth puree.</li>
+        <li>Heat oil, add cumin seeds and onion, sauté till golden.</li>
+        <li>Add ginger paste, turmeric, coriander powder, sauté 1 min.</li>
+        <li>Add tomato puree, cook 3–4 min.</li>
+        <li>Add spinach puree, cook 5 min, add salt and garam masala.</li>
+        <li>Add paneer cubes, simmer 5 min.</li>
+        <li>Optional: stir in cream before serving.</li>
+      </ol>
+      <button onclick="addFavorite('Palak Paneer')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 52. Chana Masala -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Chana Masala</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'chana-masala')"></p>
+      <p>Prep: 15 min | Cook: 30 min | Total: 45 min</p>
+    </div>
+    <div class="card-back" id="chana-masala">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup chickpeas / 200g (soaked overnight)</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, pureed</li>
+        <li>1 tsp ginger-garlic paste</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1 tsp garam masala</li>
+        <li>1/2 tsp red chili powder</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander leaves for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Pressure cook chickpeas with water and salt until soft.</li>
+        <li>Heat oil, add cumin seeds, onion, sauté till golden.</li>
+        <li>Add ginger-garlic paste, sauté 1 min.</li>
+        <li>Add tomato puree, turmeric, coriander, chili powder, cook 5 min.</li>
+        <li>Add chickpeas with some water, simmer 10 min.</li>
+        <li>Add garam masala, garnish with coriander leaves, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Chana Masala')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 53. Aloo Gobi -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Aloo Gobi</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'aloo-gobi')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="aloo-gobi">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 medium potatoes, cubed</li>
+        <li>1 small cauliflower, cut into florets</li>
+        <li>1 onion, chopped</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, add cumin seeds, sauté 1 min.</li>
+        <li>Add onion and ginger paste, cook till soft.</li>
+        <li>Add potatoes and cauliflower, turmeric, coriander powder, salt, cook 10–12 min with lid.</li>
+        <li>Add garam masala, cook 2 min more.</li>
+        <li>Garnish with coriander leaves and serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Aloo Gobi')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 54. Vegetable Biryani -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Vegetable Biryani</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'veg-biryani')"></p>
+      <p>Prep: 20 min | Cook: 40 min | Total: 60 min</p>
+    </div>
+    <div class="card-back" id="veg-biryani">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup basmati rice / 200g</li>
+        <li>2 cups mixed vegetables / 200g</li>
+        <li>1 onion, sliced</li>
+        <li>1 tomato, chopped</li>
+        <li>1 tsp ginger-garlic paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp garam masala</li>
+        <li>1/2 tsp red chili powder</li>
+        <li>1/4 tsp saffron (optional)</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+        <li>2 cups water / 500ml</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Wash rice, soak 20 min, drain.</li>
+        <li>Heat oil, sauté onions till golden, add ginger-garlic paste, cook 1 min.</li>
+        <li>Add tomato, spices, cook 3 min.</li>
+        <li>Add vegetables and rice, stir gently.</li>
+        <li>Add water, cover, cook 15–20 min till rice is done.</li>
+        <li>Optional: sprinkle saffron, fluff rice and serve.</li>
+      </ol>
+      <button onclick="addFavorite('Vegetable Biryani')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 55. Matar Paneer -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Matar Paneer</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'matar-paneer')"></p>
+      <p>Prep: 15 min | Cook: 25 min | Total: 40 min</p>
+    </div>
+    <div class="card-back" id="matar-paneer">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>250g paneer, cubed</li>
+        <li>1 cup green peas / 150g</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, pureed</li>
+        <li>1 tsp ginger paste</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, add cumin seeds and onion, sauté till golden.</li>
+        <li>Add ginger paste, sauté 1 min.</li>
+        <li>Add tomato puree, turmeric, coriander powder, cook 3–4 min.</li>
+        <li>Add peas and paneer, simmer 5–7 min.</li>
+        <li>Add garam masala, mix gently, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Matar Paneer')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- ...Recipes 56–75 follow the same detailed format... -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+<!-- --------------- CHUNK 3B: Indian Recipes 56–75 (Complete) --------------- -->
+
+<!-- 56. Bhindi Masala -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Bhindi Masala</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'bhindi-masala')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="bhindi-masala">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>250g okra / bhindi, washed & chopped</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, chopped</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp red chili powder</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, add cumin seeds.</li>
+        <li>Add onion, sauté till golden.</li>
+        <li>Add tomatoes and spices, cook 3–4 min.</li>
+        <li>Add bhindi, cook 12–15 min on low heat till tender.</li>
+        <li>Serve hot with roti or rice.</li>
+      </ol>
+      <button onclick="addFavorite('Bhindi Masala')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 57. Baingan Bharta -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Baingan Bharta</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'baingan-bharta')"></p>
+      <p>Prep: 10 min | Cook: 25 min | Total: 35 min</p>
+    </div>
+    <div class="card-back" id="baingan-bharta">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 large eggplant / baingan</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, chopped</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Roast eggplant directly on flame or oven till skin chars, then peel and mash.</li>
+        <li>Heat oil, add cumin seeds, sauté onion and ginger paste.</li>
+        <li>Add tomatoes, turmeric, coriander, cook 3–4 min.</li>
+        <li>Add mashed eggplant, mix well, simmer 5–7 min.</li>
+        <li>Garnish with coriander, serve with roti.</li>
+      </ol>
+      <button onclick="addFavorite('Baingan Bharta')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 58. Paneer Butter Masala -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Paneer Butter Masala</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'paneer-butter-masala')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="paneer-butter-masala">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>250g paneer, cubed</li>
+        <li>2 tomatoes, pureed</li>
+        <li>1 onion, finely chopped</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp red chili powder</li>
+        <li>1 tsp garam masala</li>
+        <li>3 tbsp butter / 45g</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+        <li>2 tbsp cream (optional)</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat butter + oil, sauté onions and ginger paste till golden.</li>
+        <li>Add tomato puree, turmeric, chili powder, cook 4–5 min.</li>
+        <li>Add paneer cubes, garam masala, salt, simmer 5 min.</li>
+        <li>Optional: add cream for richness, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Paneer Butter Masala')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 59. Rajma Masala -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Rajma Masala</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'rajma-masala')"></p>
+      <p>Prep: 15 min | Cook: 35 min | Total: 50 min</p>
+    </div>
+    <div class="card-back" id="rajma-masala">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup kidney beans / rajma (soaked overnight)</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, pureed</li>
+        <li>1 tsp ginger paste</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Pressure cook rajma with salt till soft.</li>
+        <li>Heat oil, add cumin seeds, sauté onion and ginger paste.</li>
+        <li>Add tomato puree, turmeric, coriander, cook 4 min.</li>
+        <li>Add cooked rajma, simmer 10 min, add garam masala.</li>
+        <li>Serve with steamed rice.</li>
+      </ol>
+      <button onclick="addFavorite('Rajma Masala')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 60. Dal Tadka -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Dal Tadka</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'dal-tadka')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="dal-tadka">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup yellow moong dal / 200g</li>
+        <li>1 onion, chopped</li>
+        <li>1 tomato, chopped</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp ghee / 5g</li>
+        <li>1 tsp oil / 5ml</li>
+        <li>Salt to taste</li>
+        <li>2 cups water / 500ml</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Wash dal, cook with water, turmeric, salt till soft.</li>
+        <li>Heat ghee + oil, add cumin seeds, sauté onion 2–3 min.</li>
+        <li>Add tomato, cook 2 min, pour over cooked dal.</li>
+        <li>Garnish with coriander, serve hot with rice or roti.</li>
+      </ol>
+      <button onclick="addFavorite('Dal Tadka')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- --------------- CHUNK 3C: Indian Recipes 61–75 (Complete) --------------- -->
+
+<!-- 61. Vegetable Pulao -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Vegetable Pulao</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'veg-pulao')"></p>
+      <p>Prep: 15 min | Cook: 25 min | Total: 40 min</p>
+    </div>
+    <div class="card-back" id="veg-pulao">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup basmati rice / 200g</li>
+        <li>2 cups mixed vegetables / 200g (carrot, peas, beans)</li>
+        <li>1 onion, sliced</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>2 cups water / 500ml</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Wash and soak rice 15 min.</li>
+        <li>Heat oil, add cumin seeds and onion, sauté till golden.</li>
+        <li>Add vegetables, turmeric, salt, sauté 2–3 min.</li>
+        <li>Add rice and water, bring to boil, simmer 15 min till cooked.</li>
+        <li>Garnish with coriander, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Vegetable Pulao')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 62. Kadai Paneer -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Kadai Paneer</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'kadai-paneer')"></p>
+      <p>Prep: 15 min | Cook: 20 min | Total: 35 min</p>
+    </div>
+    <div class="card-back" id="kadai-paneer">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>250g paneer cubes</li>
+        <li>1 onion, chopped</li>
+        <li>1 capsicum / bell pepper, chopped</li>
+        <li>2 tomatoes, pureed</li>
+        <li>1 tsp ginger-garlic paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>1 tsp dried kasuri methi</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, sauté onion, capsicum 2–3 min.</li>
+        <li>Add ginger-garlic paste, cook 1 min.</li>
+        <li>Add tomato puree and spices, cook 4–5 min.</li>
+        <li>Add paneer, kasuri methi, simmer 5 min.</li>
+        <li>Serve hot with roti or naan.</li>
+      </ol>
+      <button onclick="addFavorite('Kadai Paneer')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 63. Methi Malai Paneer -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Methi Malai Paneer</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'methi-malai-paneer')"></p>
+      <p>Prep: 10 min | Cook: 15 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="methi-malai-paneer">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>250g paneer cubes</li>
+        <li>1 cup fresh fenugreek leaves / methi</li>
+        <li>2 tbsp cream / 30ml</li>
+        <li>1 onion, chopped</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, sauté onions and ginger paste till soft.</li>
+        <li>Add methi leaves, cook 2–3 min.</li>
+        <li>Add paneer, turmeric, coriander, salt, simmer 5 min.</li>
+        <li>Add cream, mix gently, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Methi Malai Paneer')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 64. Aloo Matar -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Aloo Matar</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'aloo-matar')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="aloo-matar">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 medium potatoes, cubed</li>
+        <li>1 cup green peas / 150g</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, pureed</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, add cumin seeds and onion, sauté till soft.</li>
+        <li>Add turmeric, coriander, tomato puree, cook 3 min.</li>
+        <li>Add potatoes and peas, cook 10–12 min till tender.</li>
+        <li>Serve hot with roti or rice.</li>
+      </ol>
+      <button onclick="addFavorite('Aloo Matar')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 65. Dum Aloo -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Dum Aloo</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'dum-aloo')"></p>
+      <p>Prep: 15 min | Cook: 25 min | Total: 40 min</p>
+    </div>
+    <div class="card-back" id="dum-aloo">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>4 small potatoes, boiled and peeled</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, pureed</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1 tsp garam masala</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, sauté onions till golden.</li>
+        <li>Add tomato puree and spices, cook 4–5 min.</li>
+        <li>Add boiled potatoes, coat well, simmer 8–10 min.</li>
+        <li>Serve hot with naan or rice.</li>
+      </ol>
+      <button onclick="addFavorite('Dum Aloo')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 66. Gobi Masala -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Gobi Masala</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'gobi-masala')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="gobi-masala">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 small cauliflower, florets</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, chopped</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, add cumin seeds, sauté onion till soft.</li>
+        <li>Add tomatoes and spices, cook 4–5 min.</li>
+        <li>Add cauliflower, cover and cook 12–15 min till tender.</li>
+        <li>Add garam masala, mix gently, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Gobi Masala')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 67. Veg Kofta Curry -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veg Kofta Curry</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'veg-kofta')"></p>
+      <p>Prep: 25 min | Cook: 30 min | Total: 55 min</p>
+    </div>
+    <div class="card-back" id="veg-kofta">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>200g grated vegetables (carrot, beans, peas)</li>
+        <li>50g paneer, grated</li>
+        <li>1/4 cup gram flour / besan</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, pureed</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Mix grated vegetables, paneer, gram flour, salt to form kofta balls.</li>
+        <li>Deep fry koftas till golden, drain on paper towel.</li>
+        <li>Heat oil, sauté onion and ginger paste, add tomato puree and spices, cook 5 min.</li>
+        <li>Add fried koftas to curry, simmer 5 min, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Veg Kofta Curry')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 68. Lauki Chana Dal -->
+<!-- 69. Tinda Masala -->
+<!-- 70. Kadhi Pakora -->
+<!-- 71. Veg Jalfrezi -->
+<!-- 72. Paneer Bhurji -->
+<!-- 73. Malai Kofta -->
+<!-- 74. Jeera Aloo -->
+<!-- 75. Baingan Masala -->
+
+<!-- --------------- CHUNK 3D: Indian Recipes 68–75 (Complete) --------------- -->
+
+<!-- 68. Lauki Chana Dal -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Lauki Chana Dal</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'lauki-chana-dal')"></p>
+      <p>Prep: 15 min | Cook: 35 min | Total: 50 min</p>
+    </div>
+    <div class="card-back" id="lauki-chana-dal">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup chana dal / 200g, soaked 30 min</li>
+        <li>1 medium bottle gourd / lauki, peeled & diced</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, chopped</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp cumin seeds</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Boil chana dal till soft, drain and keep aside.</li>
+        <li>Heat oil, sauté cumin seeds and onions till golden.</li>
+        <li>Add ginger paste, tomatoes, turmeric, salt; cook 3–4 min.</li>
+        <li>Add lauki and boiled dal, cook 10–12 min till tender.</li>
+        <li>Garnish with coriander, serve hot with rice.</li>
+      </ol>
+      <button onclick="addFavorite('Lauki Chana Dal')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 69. Tinda Masala -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Tinda Masala</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'tinda-masala')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="tinda-masala">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>4 tinda / apple gourd, peeled and halved</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, pureed</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, add cumin seeds and sauté onions till soft.</li>
+        <li>Add tomato puree, turmeric, coriander, salt; cook 3–4 min.</li>
+        <li>Add tinda, cover, cook 10–12 min till tender.</li>
+        <li>Sprinkle garam masala, mix gently, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Tinda Masala')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 70. Kadhi Pakora -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Kadhi Pakora</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'kadhi-pakora')"></p>
+      <p>Prep: 15 min | Cook: 30 min | Total: 45 min</p>
+    </div>
+    <div class="card-back" id="kadhi-pakora">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup gram flour / besan</li>
+        <li>1 cup yogurt / dahi</li>
+        <li>1 onion, finely chopped (for pakora)</li>
+        <li>1 tsp cumin seeds</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1/2 tsp chili powder</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Make a thick batter of besan, turmeric, salt, chopped onion; fry small pakoras, drain on paper towel.</li>
+        <li>Whisk yogurt with water, add besan to make kadhi batter.</li>
+        <li>Heat oil, add cumin seeds, pour kadhi mixture, cook 10–12 min till thick.</li>
+        <li>Add pakoras, simmer 5 min, garnish with coriander, serve hot with rice.</li>
+      </ol>
+      <button onclick="addFavorite('Kadhi Pakora')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 71. Veg Jalfrezi -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veg Jalfrezi</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'veg-jalfrezi')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="veg-jalfrezi">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup mixed vegetables / 150g (capsicum, carrot, beans)</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, chopped</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, sauté onion and ginger paste till soft.</li>
+        <li>Add vegetables, cook 5 min.</li>
+        <li>Add tomatoes and spices, cook 5–7 min till tender.</li>
+        <li>Sprinkle garam masala, mix gently, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Veg Jalfrezi')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 72. Paneer Bhurji -->
+<div class="recipe-card" data-category="breakfast" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Paneer Bhurji</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge breakfast">Breakfast</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'paneer-bhurji')"></p>
+      <p>Prep: 5 min | Cook: 10 min | Total: 15 min</p>
+    </div>
+    <div class="card-back" id="paneer-bhurji">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>200g paneer, crumbled</li>
+        <li>1 onion, chopped</li>
+        <li>1 tomato, chopped</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1/2 tsp chili powder</li>
+        <li>1 tsp oil / 5ml</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, sauté onion and ginger paste till soft.</li>
+        <li>Add tomato and spices, cook 2–3 min.</li>
+        <li>Add crumbled paneer, mix, cook 2–3 min.</li>
+        <li>Garnish with coriander, serve hot with toast or paratha.</li>
+      </ol>
+      <button onclick="addFavorite('Paneer Bhurji')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 73. Malai Kofta -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Malai Kofta</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'malai-kofta')"></p>
+      <p>Prep: 30 min | Cook: 25 min | Total: 55 min</p>
+    </div>
+    <div class="card-back" id="malai-kofta">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>200g paneer, grated</li>
+        <li>1 boiled potato, mashed</li>
+        <li>2 tbsp cream / 30ml</li>
+        <li>1/2 tsp cardamom powder</li>
+        <li>1/4 cup cornflour / 30g</li>
+        <li>Oil for frying</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, pureed</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Mix paneer, mashed potato, cardamom, cornflour, form balls (koftas).</li>
+        <li>Deep fry koftas till golden, drain on paper towel.</li>
+        <li>Heat oil, sauté onion, add tomato puree, spices; cook 5–6 min.</li>
+        <li>Add cream, simmer 2 min, place koftas in curry, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Malai Kofta')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 74. Jeera Aloo -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Jeera Aloo</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'jeera-aloo')"></p>
+      <p>Prep: 5 min | Cook: 15 min | Total: 20 min</p>
+    </div>
+    <div class="card-back" id="jeera-aloo">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>4 medium potatoes, boiled & cubed</li>
+        <li>1 tsp cumin seeds</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1/2 tsp chili powder</li>
+        <li>Salt to taste</li>
+        <li>Fresh coriander for garnish</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, add cumin seeds, sauté 30 sec.</li>
+        <li>Add turmeric, chili, salt; mix well.</li>
+        <li>Add boiled potato cubes, sauté 5–7 min till coated & warm.</li>
+        <li>Garnish with coriander, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Jeera Aloo')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 75. Baingan Masala -->
+<div class="recipe-card" data-category="dinner" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Baingan Masala</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge dinner">Dinner</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'baingan-masala')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="baingan-masala">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 medium eggplants / brinjal, chopped</li>
+        <li>1 onion, chopped</li>
+        <li>2 tomatoes, chopped</li>
+        <li>1 tsp ginger paste</li>
+        <li>1/2 tsp turmeric powder</li>
+        <li>1 tsp coriander powder</li>
+        <li>1/2 tsp garam masala</li>
+        <li>2 tsp oil / 10ml</li>
+        <li>Salt to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Heat oil, sauté onion and ginger paste till soft.</li>
+        <li>Add tomatoes and spices, cook 5 min.</li>
+        <li>Add chopped eggplant, cover, cook 10–12 min till tender.</li>
+        <li>Sprinkle garam masala, mix gently, serve hot.</li>
+      </ol>
+      <button onclick="addFavorite('Baingan Masala')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<!-- --------------- CHUNK 4: International Recipes 1–25 --------------- -->
+
+
+  <!-- --------------- CHUNK 4: School Lunchbox Ideas 76–100 --------------- -->
+
+<!-- 76. Veg Wrap -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veg Wrap</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'veg-wrap')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="veg-wrap">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 whole wheat tortilla</li>
+        <li>2 tbsp hummus</li>
+        <li>1/4 cup grated carrot</li>
+        <li>1/4 cup sliced cucumber</li>
+        <li>1/4 cup bell pepper strips</li>
+        <li>Handful fresh spinach</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Spread hummus over tortilla.</li>
+        <li>Add veggies, sprinkle salt & pepper.</li>
+        <li>Roll tightly, cut in half, pack in lunchbox.</li>
+      </ol>
+      <button onclick="addFavorite('Veg Wrap')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 77. Peanut Butter Banana Sandwich -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Peanut Butter Banana Sandwich</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'pb-banana-sandwich')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="pb-banana-sandwich">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 slices whole wheat bread</li>
+        <li>2 tsp peanut butter</li>
+        <li>1 small banana, sliced</li>
+        <li>Optional: drizzle honey</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Spread peanut butter on one slice of bread.</li>
+        <li>Layer banana slices evenly.</li>
+        <li>Top with second slice, cut in half, pack.</li>
+      </ol>
+      <button onclick="addFavorite('Peanut Butter Banana Sandwich')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 78. Cheese & Tomato Pinwheels -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Cheese & Tomato Pinwheels</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'cheese-tomato-pinwheels')"></p>
+      <p>Prep: 10 min | Cook: 10 min | Total: 20 min</p>
+    </div>
+    <div class="card-back" id="cheese-tomato-pinwheels">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 sheet puff pastry</li>
+        <li>1/2 cup grated cheese</li>
+        <li>1 small tomato, finely chopped</li>
+        <li>1 tsp dried oregano</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Preheat oven 180°C (350°F).</li>
+        <li>Roll puff pastry, sprinkle cheese, tomatoes, oregano, salt & pepper.</li>
+        <li>Roll tightly, cut into 1-inch slices, bake 10 min until golden.</li>
+      </ol>
+      <button onclick="addFavorite('Cheese & Tomato Pinwheels')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 79. Veggie Sushi Rolls -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Sushi Rolls</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'veggie-sushi-rolls')"></p>
+      <p>Prep: 15 min | Cook: 10 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="veggie-sushi-rolls">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup sushi rice, cooked & seasoned</li>
+        <li>4 nori sheets</li>
+        <li>1/4 cucumber, julienned</li>
+        <li>1/4 carrot, julienned</li>
+        <li>1/4 avocado, sliced</li>
+        <li>Optional: soy sauce for dipping</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Place nori sheet on bamboo mat, spread rice thinly.</li>
+        <li>Layer veggies, roll tightly with mat.</li>
+        <li>Slice into 6–8 pieces, serve with soy sauce.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Sushi Rolls')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 80. Mini Veg Muffins -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Mini Veg Muffins</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="12" onchange="updateServings(this,'mini-veg-muffins')"></p>
+      <p>Prep: 10 min | Cook: 15 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="mini-veg-muffins">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup whole wheat flour</li>
+        <li>1/2 cup milk</li>
+        <li>1/2 cup grated carrot</li>
+        <li>1/4 cup corn kernels</li>
+        <li>1 tsp baking powder</li>
+        <li>1/2 tsp salt</li>
+        <li>1/2 tsp black pepper</li>
+        <li>2 tsp oil / 10ml</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Preheat oven 180°C (350°F).</li>
+        <li>Mix dry ingredients, add milk & oil, stir in vegetables.</li>
+        <li>Pour into mini muffin tins, bake 12–15 min till golden.</li>
+      </ol>
+      <button onclick="addFavorite('Mini Veg Muffins')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 81. Fruit & Yogurt Parfait -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Fruit & Yogurt Parfait</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'fruit-yogurt-parfait')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="fruit-yogurt-parfait">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1/2 cup yogurt</li>
+        <li>1/4 cup granola</li>
+        <li>1/4 cup mixed berries / fruits</li>
+        <li>1 tsp honey</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Layer yogurt, granola, and fruits in a cup.</li>
+        <li>Drizzle honey on top, serve chilled.</li>
+      </ol>
+      <button onclick="addFavorite('Fruit & Yogurt Parfait')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 82. Veggie Rice Balls -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Rice Balls</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'veggie-rice-balls')"></p>
+      <p>Prep: 15 min | Cook: 10 min | Total: 25 min</p>
+    </div>
+    <div class="card-back" id="veggie-rice-balls">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 cups cooked rice</li>
+        <li>1/4 cup grated carrot</li>
+        <li>1/4 cup peas, boiled</li>
+        <li>1/4 tsp salt</li>
+        <li>1/4 tsp black pepper</li>
+        <li>2 tsp oil for pan-frying</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Mix rice and vegetables, shape into balls.</li>
+        <li>Pan-fry lightly 2–3 min each side until golden.</li>
+        <li>Cool and pack in lunchbox.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Rice Balls')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- --------------- CHUNK 4 CONTINUED: School Lunchbox Ideas 83–100 --------------- -->
+
+<!-- 83. Cucumber & Cheese Sandwich -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Cucumber & Cheese Sandwich</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'cucumber-cheese-sandwich')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="cucumber-cheese-sandwich">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 slices whole wheat bread</li>
+        <li>2 slices cheese</li>
+        <li>1/4 cucumber, thinly sliced</li>
+        <li>Butter or mayo as needed</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Spread butter/mayo on bread slices.</li>
+        <li>Layer cucumber slices and cheese.</li>
+        <li>Close sandwich, cut diagonally, pack.</li>
+      </ol>
+      <button onclick="addFavorite('Cucumber & Cheese Sandwich')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 84. Spinach & Corn Quesadilla -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Spinach & Corn Quesadilla</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'spinach-corn-quesadilla')"></p>
+      <p>Prep: 5 min | Cook: 5 min | Total: 10 min</p>
+    </div>
+    <div class="card-back" id="spinach-corn-quesadilla">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 tortilla wrap</li>
+        <li>1/4 cup grated cheese</li>
+        <li>1/4 cup boiled corn</li>
+        <li>Handful chopped spinach</li>
+        <li>1 tsp olive oil</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Place tortilla on pan, sprinkle cheese, corn, spinach.</li>
+        <li>Fold, cook 2–3 min per side until golden.</li>
+        <li>Cut into wedges, pack warm or room temp.</li>
+      </ol>
+      <button onclick="addFavorite('Spinach & Corn Quesadilla')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 85. Hummus & Veggie Pita -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Hummus & Veggie Pita</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'hummus-veggie-pita')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="hummus-veggie-pita">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 pita bread</li>
+        <li>2 tbsp hummus</li>
+        <li>1/4 cup shredded carrot</li>
+        <li>1/4 cup cucumber slices</li>
+        <li>1/4 cup bell peppers</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Cut pita in half, open pocket.</li>
+        <li>Spread hummus inside, stuff with veggies.</li>
+        <li>Pack gently, serve chilled or room temp.</li>
+      </ol>
+      <button onclick="addFavorite('Hummus & Veggie Pita')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 86. Veggie Pasta Salad -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Pasta Salad</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'veggie-pasta-salad')"></p>
+      <p>Prep: 10 min | Cook: 10 min | Total: 20 min</p>
+    </div>
+    <div class="card-back" id="veggie-pasta-salad">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup cooked pasta (penne or fusilli)</li>
+        <li>1/4 cup chopped bell peppers</li>
+        <li>1/4 cup sweet corn</li>
+        <li>1/4 cup chopped cucumber</li>
+        <li>2 tbsp olive oil</li>
+        <li>1 tsp lemon juice</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Cook pasta, drain, cool slightly.</li>
+        <li>Mix pasta with all veggies.</li>
+        <li>Toss with olive oil, lemon, salt & pepper.</li>
+        <li>Serve chilled or room temp.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Pasta Salad')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 87. Mini Veggie Burgers -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Mini Veggie Burgers</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'mini-veg-burgers')"></p>
+      <p>Prep: 10 min | Cook: 10 min | Total: 20 min</p>
+    </div>
+    <div class="card-back" id="mini-veg-burgers">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>4 mini burger buns</li>
+        <li>1 cup mashed boiled potato & peas mix</li>
+        <li>1/4 cup grated carrot</li>
+        <li>1 tsp olive oil</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Form small patties from mashed veggie mix.</li>
+        <li>Pan-fry with 1 tsp oil 2–3 min per side.</li>
+        <li>Place patties in buns, add lettuce or tomato if desired.</li>
+      </ol>
+      <button onclick="addFavorite('Mini Veggie Burgers')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 88. Caprese Skewers -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Caprese Skewers</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="4" onchange="updateServings(this,'caprese-skewers')"></p>
+      <p>Prep: 10 min | Cook: 0 min | Total: 10 min</p>
+    </div>
+    <div class="card-back" id="caprese-skewers">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>12 cherry tomatoes</li>
+        <li>12 small mozzarella balls</li>
+        <li>12 fresh basil leaves</li>
+        <li>1 tbsp balsamic glaze</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Skewer tomato, basil, mozzarella in order.</li>
+        <li>Drizzle balsamic glaze, sprinkle salt & pepper.</li>
+        <li>Pack carefully for lunch.</li>
+      </ol>
+      <button onclick="addFavorite('Caprese Skewers')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 89. Veggie & Cheese Wrap -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie & Cheese Wrap</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'veggie-cheese-wrap')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="veggie-cheese-wrap">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 tortilla wrap</li>
+        <li>1/4 cup shredded cheese</li>
+        <li>1/4 cup sliced cucumber</li>
+        <li>1/4 cup grated carrot</li>
+        <li>Handful lettuce</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Spread veggies and cheese on wrap.</li>
+        <li>Roll tightly, cut in half, pack.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie & Cheese Wrap')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 90. Sweet Potato Fries -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Sweet Potato Fries</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'sweet-potato-fries')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="sweet-potato-fries">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 medium sweet potatoes, cut into fries</li>
+        <li>1 tsp olive oil</li>
+        <li>1/4 tsp paprika</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Preheat oven 200°C (400°F).</li>
+        <li>Toss sweet potatoes with olive oil, paprika, salt & pepper.</li>
+        <li>Bake 20 min, turning halfway, until crispy.</li>
+      </ol>
+      <button onclick="addFavorite('Sweet Potato Fries')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 91. Chickpea Salad Sandwich -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Chickpea Salad Sandwich</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'chickpea-salad-sandwich')"></p>
+      <p>Prep: 10 min | Cook: 0 min | Total: 10 min</p>
+    </div>
+    <div class="card-back" id="chickpea-salad-sandwich">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1/2 cup cooked chickpeas, mashed</li>
+        <li>2 slices whole wheat bread</li>
+        <li>2 tsp mayo / yogurt</li>
+        <li>1/4 cup chopped celery</li>
+        <li>1/4 tsp salt & pepper</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Mix chickpeas, mayo/yogurt, celery, salt & pepper.</li>
+        <li>Spread on bread, close sandwich, cut, pack.</li>
+      </ol>
+      <button onclick="addFavorite('Chickpea Salad Sandwich')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- --------------- CHUNK 4 FINAL: School Lunchbox Ideas 92–100 --------------- -->
+
+<!-- 92. Avocado Toast -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Avocado Toast</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'avocado-toast')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="avocado-toast">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 slice whole wheat bread</li>
+        <li>1/2 ripe avocado</li>
+        <li>Salt & pepper to taste</li>
+        <li>Optional: cherry tomatoes or sprouts</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Mash avocado, season with salt & pepper.</li>
+        <li>Spread on toasted bread, add optional toppings.</li>
+      </ol>
+      <button onclick="addFavorite('Avocado Toast')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 93. Veggie Sushi Rolls -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Sushi Rolls</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'veggie-sushi-rolls')"></p>
+      <p>Prep: 20 min | Cook: 10 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="veggie-sushi-rolls">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup sushi rice, cooked & seasoned</li>
+        <li>4 nori sheets</li>
+        <li>1/4 cup cucumber strips</li>
+        <li>1/4 cup carrot strips</li>
+        <li>1/4 avocado, sliced</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Place nori on bamboo mat, spread rice evenly.</li>
+        <li>Layer cucumber, carrot, avocado.</li>
+        <li>Roll tightly, slice into pieces, pack carefully.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Sushi Rolls')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 94. Greek Yogurt Parfait -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Greek Yogurt Parfait</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'greek-yogurt-parfait')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="greek-yogurt-parfait">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1/2 cup Greek yogurt</li>
+        <li>1/4 cup granola</li>
+        <li>1/4 cup mixed berries</li>
+        <li>1 tsp honey (optional)</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Layer yogurt, granola, and berries in a cup.</li>
+        <li>Drizzle honey on top, pack chilled.</li>
+      </ol>
+      <button onclick="addFavorite('Greek Yogurt Parfait')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 95. Veggie Wraps with Hummus -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Wraps with Hummus</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'veggie-wraps-hummus')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="veggie-wraps-hummus">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 large tortilla wraps</li>
+        <li>1/4 cup hummus</li>
+        <li>1/4 cup sliced bell peppers</li>
+        <li>1/4 cup cucumber slices</li>
+        <li>Handful lettuce</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Spread hummus on wraps, layer veggies.</li>
+        <li>Roll tightly, cut in half, pack for lunch.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Wraps with Hummus')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 96. Peanut Butter Banana Sandwich -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Peanut Butter Banana Sandwich</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'pb-banana-sandwich')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="pb-banana-sandwich">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 slices whole wheat bread</li>
+        <li>2 tbsp peanut butter</li>
+        <li>1 small banana, sliced</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Spread peanut butter on bread slices.</li>
+        <li>Add banana slices, close sandwich, cut, pack.</li>
+      </ol>
+      <button onclick="addFavorite('Peanut Butter Banana Sandwich')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 97. Roasted Veggie Bowl -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Roasted Veggie Bowl</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="2" onchange="updateServings(this,'roasted-veggie-bowl')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="roasted-veggie-bowl">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup chopped broccoli</li>
+        <li>1 cup chopped carrots</li>
+        <li>1 cup chopped bell peppers</li>
+        <li>1 tsp olive oil</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Preheat oven 200°C (400°F).</li>
+        <li>Toss veggies with olive oil, salt & pepper.</li>
+        <li>Roast 20 min until tender, pack warm or cold.</li>
+      </ol>
+      <button onclick="addFavorite('Roasted Veggie Bowl')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 98. Tomato & Mozzarella Sandwich -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Tomato & Mozzarella Sandwich</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'tomato-mozzarella-sandwich')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="tomato-mozzarella-sandwich">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>2 slices bread</li>
+        <li>2 slices mozzarella cheese</li>
+        <li>2 tomato slices</li>
+        <li>Handful lettuce</li>
+        <li>Salt & pepper to taste</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Layer cheese, tomato, and lettuce on bread.</li>
+        <li>Close sandwich, cut diagonally, pack for lunch.</li>
+      </ol>
+      <button onclick="addFavorite('Tomato & Mozzarella Sandwich')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 99. Veggie Muffins -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Veggie Muffins</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="6" onchange="updateServings(this,'veggie-muffins')"></p>
+      <p>Prep: 10 min | Cook: 20 min | Total: 30 min</p>
+    </div>
+    <div class="card-back" id="veggie-muffins">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 cup whole wheat flour</li>
+        <li>1 tsp baking powder</li>
+        <li>1/4 tsp salt</li>
+        <li>1/2 cup milk</li>
+        <li>1/4 cup grated carrot</li>
+        <li>1/4 cup corn kernels</li>
+        <li>2 tbsp olive oil</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Preheat oven 180°C (350°F).</li>
+        <li>Mix all ingredients to form batter.</li>
+        <li>Pour into muffin tins, bake 20 min.</li>
+      </ol>
+      <button onclick="addFavorite('Veggie Muffins')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+<!-- 100. Rainbow Veggie Wrap -->
+<div class="recipe-card" data-category="lunch" data-diet="vegetarian">
+  <div class="card-inner">
+    <div class="card-front">
+      <h3>Rainbow Veggie Wrap</h3>
+      <span class="badge vegetarian">Vegetarian</span>
+      <span class="badge lunch">Lunch</span>
+      <p>Servings: <input class="servings" type="number" value="1" onchange="updateServings(this,'rainbow-veggie-wrap')"></p>
+      <p>Prep: 5 min | Cook: 0 min | Total: 5 min</p>
+    </div>
+    <div class="card-back" id="rainbow-veggie-wrap">
+      <h4>Ingredients:</h4>
+      <ul>
+        <li>1 large tortilla wrap</li>
+        <li>1/4 cup shredded red cabbage</li>
+        <li>1/4 cup grated carrot</li>
+        <li>1/4 cup sliced bell peppers</li>
+        <li>Handful lettuce</li>
+        <li>2 tbsp hummus</li>
+      </ul>
+      <h4>Steps:</h4>
+      <ol>
+        <li>Spread hummus on wrap, layer veggies in rainbow order.</li>
+        <li>Roll tightly, cut in half, pack for lunch.</li>
+      </ol>
+      <button onclick="addFavorite('Rainbow Veggie Wrap')">⭐ Favorite</button>
+    </div>
+  </div>
+</div>
+
+  
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+<div id="bottombar">
+  <button onclick="viewFavorites()">⭐ Favorites</button>
+  <button onclick="weeklyPlan()">📅 Weekly Plan</button>
+  <button onclick="shoppingList()">🛒 Shopping List</button>
+</div>
+
+<script>
+function filterCategory(cat){ 
+  document.querySelectorAll('.recipe-card').forEach(card=>{
+    card.style.display = card.dataset.category===cat ? 'block':'none';
+  }); 
+}
+function filterDiet(diet){ 
+  document.querySelectorAll('.recipe-card').forEach(card=>{
+    card.style.display = card.dataset.diet===diet ? 'block':'none';
+  }); 
+}
+function clearFilters(){ document.querySelectorAll('.recipe-card').forEach(c=>c.style.display='block'); }
+function toggleDarkMode(){ document.body.classList.toggle('dark'); }
+function surpriseMe(){ 
+  let cards = Array.from(document.querySelectorAll('.recipe-card')); 
+  cards.forEach(c=>c.style.display='none'); 
+  let rand = cards[Math.floor(Math.random()*cards.length)]; 
+  rand.style.display='block'; 
+}
+function addFavorite(name){ alert(name + " added to favorites! ⭐"); }
+function viewFavorites(){ alert("Viewing Favorites (placeholder)"); }
+function weeklyPlan(){ alert("Weekly Plan (placeholder)"); }
+function shoppingList(){ alert("Shopping List (placeholder)"); }
+
+function updateServings(input, recipeId){
+  let card = document.getElementById(recipeId);
+  let factor = input.value / parseInt(input.defaultValue);
+  card.querySelectorAll('ul li').forEach(li=>{
+    // Very simple multiplier for numeric amounts in string (demo purposes)
+    li.textContent = li.textContent.replace(/(\d+(\.\d+)?)(\s?(g|ml|cup|tbsp|tsp|oz))?/g, (match,p1,p2,p3)=>{
+      let num = parseFloat(p1) * factor;
+      return num.toFixed(1)+(p3||'');
+    });
+  });
+}
+</script>
+</body>
+</html>
